@@ -26,15 +26,15 @@
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
+      margin: 0;
+      padding: 12px;
       font-family: Arial, Helvetica, sans-serif;
       color: #17213d;
       background:
         radial-gradient(circle at 12% 15%, rgba(255,255,255,.85) 0 2%, transparent 2.5%),
         radial-gradient(circle at 86% 12%, rgba(255,255,255,.8) 0 2%, transparent 2.5%),
         linear-gradient(#73cdf8 0%, #c9efff 52%, #fff2a7 100%);
-      padding: 12px;
     }
 
     .app {
@@ -47,7 +47,7 @@
       background: rgba(255,255,255,.96);
       border: 5px solid white;
       border-radius: 25px;
-      box-shadow: 0 14px 35px rgba(17, 38, 91, .25);
+      box-shadow: 0 14px 35px rgba(17,38,91,.25);
     }
 
     header {
@@ -122,6 +122,7 @@
       font-weight: bold;
       text-decoration: none;
       cursor: pointer;
+      touch-action: manipulation;
       transition: transform .15s, filter .15s;
     }
 
@@ -136,21 +137,10 @@
       opacity: .5;
     }
 
-    .green-button {
-      background: var(--green);
-    }
-
-    .blue-button {
-      background: var(--blue);
-    }
-
-    .purple-button {
-      background: var(--purple);
-    }
-
-    .navy-button {
-      background: var(--navy);
-    }
+    .green-button { background: var(--green); }
+    .blue-button { background: var(--blue); }
+    .purple-button { background: var(--purple); }
+    .navy-button { background: var(--navy); }
 
     .gold-button {
       color: var(--navy);
@@ -159,42 +149,35 @@
 
     .button-row {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 9px;
-      margin-top: 15px;
+      margin-top: 10px;
     }
 
-    /* Score / Status Area */
-    .status-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 9px;
+    /* Bible verse and question panel */
+    .devotion-panel {
       max-width: 800px;
-      margin: 0 auto 13px;
+      height: 210px;
+      margin: 0 auto 15px;
+      padding: 12px;
+      overflow-y: auto;
+      background: #e1f6ff;
+      border: 4px solid #7eccec;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.10);
     }
 
-    .status-card {
-      padding: 8px 5px;
+    .devotion-panel-title {
+      margin-bottom: 8px;
       color: var(--navy);
       text-align: center;
-      font-size: .8rem;
+      font-size: 1rem;
       font-weight: bold;
-      background: #fff9dd;
-      border: 3px solid #efd263;
-      border-radius: 13px;
-    }
-
-    .status-card strong {
-      display: block;
-      margin-top: 3px;
-      font-size: 1.2rem;
     }
 
     .message {
-      max-width: 800px;
       min-height: 42px;
-      margin: 0 auto 12px;
       padding: 10px;
       color: var(--navy);
       text-align: center;
@@ -204,20 +187,66 @@
       border-radius: 13px;
     }
 
-    .message.win {
-      color: #145c27;
-      background: #d9f8de;
-      border-color: #70ce81;
+    .devotion-panel .message {
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
     }
 
-    /* Board */
+    .message.win {
+      color: #145c27;
+    }
+
+    .move-success {
+      margin-bottom: 5px;
+      color: #145c27;
+      font-size: .95rem;
+      font-weight: bold;
+    }
+
+    .move-verse {
+      margin: 5px 0;
+      color: var(--navy);
+      font-size: .9rem;
+      font-style: italic;
+      font-weight: bold;
+    }
+
+    .devotion-question {
+      margin-top: 7px;
+      padding: 7px 9px;
+      color: var(--navy);
+      text-align: left;
+      font-size: .78rem;
+      line-height: 1.35;
+      background: rgba(255,255,255,.65);
+      border-left: 4px solid var(--gold);
+      border-radius: 7px;
+    }
+
+    .devotion-question span {
+      font-weight: normal;
+    }
+
+    /* Separate game panel */
+    .game-panel {
+      padding: 14px;
+      background: rgba(255,255,255,.85);
+      border: 3px solid #d9e9f5;
+      border-radius: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    }
+
     .board-scroll {
-      overflow-x: auto;
+      overflow-x: hidden;
       padding-bottom: 8px;
     }
 
     .solitaire-board {
-      min-width: 780px;
+      width: 100%;
+      min-width: 0;
       padding: 16px;
       background:
         radial-gradient(circle at 15% 18%, rgba(255,255,255,.12) 0 2%, transparent 2.5%),
@@ -230,7 +259,7 @@
     .top-row {
       display: flex;
       justify-content: space-between;
-      gap: 22px;
+      gap: 15px;
       min-height: 124px;
       margin-bottom: 18px;
     }
@@ -238,10 +267,10 @@
     .stock-area,
     .foundation-area {
       display: flex;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .foundation-area {
+    .stock-area {
       margin-left: auto;
     }
 
@@ -255,24 +284,30 @@
       background: rgba(255,255,255,.10);
     }
 
+    .pile-slot.drag-over,
+    .tableau-pile.drag-over {
+      outline: 4px solid var(--gold);
+      background: rgba(255,216,61,.35);
+    }
+
     .empty-foundation-label {
       position: absolute;
       top: 35px;
-      left: 5px;
       right: 5px;
+      left: 5px;
       color: white;
       text-align: center;
       font-size: .67rem;
       font-weight: bold;
       line-height: 1.2;
-      opacity: .85;
       pointer-events: none;
     }
 
     .tableau {
       display: grid;
       grid-template-columns: repeat(7, var(--card-width));
-      gap: 13px;
+      justify-content: space-between;
+      gap: 0;
       align-items: start;
     }
 
@@ -291,16 +326,16 @@
     .empty-tableau-label {
       position: absolute;
       top: 105px;
-      left: 4px;
       right: 4px;
-      color: rgba(255,255,255,.85);
+      left: 4px;
+      color: rgba(255,255,255,.9);
       text-align: center;
       font-size: .65rem;
       font-weight: bold;
       pointer-events: none;
     }
 
-    /* Playing Cards */
+    /* Playing cards */
     .playing-card {
       position: absolute;
       left: 0;
@@ -315,11 +350,16 @@
       border-radius: 11px;
       box-shadow: 0 4px 0 rgba(0,0,0,.24);
       cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
     }
 
     .playing-card:hover {
       transform: translateY(-4px);
+    }
+
+    .playing-card.dragging {
+      opacity: .45;
+      transform: scale(.96);
     }
 
     .playing-card.red-suit {
@@ -338,9 +378,54 @@
       box-shadow: 0 5px 0 #aa8400;
     }
 
+    /* Theme card background colors */
+
+    /* ⭐ Promise & Birth: light-yellow background, RED letters */
+.playing-card.suit-birth {
+  color: var(--red);
+  background: #fff9c9;
+  border-color: #fff0a3;
+}
+
+.playing-card.suit-birth .card-fact {
+  color: #8b2222;
+}
+
+/* 🕊️ Teachings: light-gray background, BLACK letters */
+.playing-card.suit-teachings {
+  color: var(--navy);
+  background: #f0f2f5;
+  border-color: #c7cdd6;
+}
+
+.playing-card.suit-teachings .card-fact {
+  color: #314666;
+}
+
+/* ❤️ Love & Miracles: light-pink background, RED letters */
+.playing-card.suit-love {
+  color: var(--red);
+  background: #ffe7ed;
+  border-color: #ffbdca;
+}
+
+.playing-card.suit-love .card-fact {
+  color: #8b2222;
+}
+
+/* ✝️ Cross & Resurrection: light-purple background, BLACK letters */
+.playing-card.suit-cross {
+  color: var(--navy);
+  background: #eee9ff;
+  border-color: #cdbdff;
+}
+
+.playing-card.suit-cross .card-fact {
+  color: #314666;
+}
+
     .playing-card.back {
       color: white;
-      cursor: pointer;
       background:
         repeating-linear-gradient(
           45deg,
@@ -365,50 +450,67 @@
       border-radius: 9px;
     }
 
-    .card-rank-top {
-      font-size: 1.05rem;
-      font-weight: bold;
-      line-height: .9;
+    .playing-card.back.recycle-ready {
+      outline: 3px solid white;
+      box-shadow: 0 0 0 4px var(--gold);
     }
 
-    .card-symbol-top {
-      display: block;
-      font-size: 1.25rem;
+    .playing-card.back.recycle-ready::before {
+      content: "↻";
+      position: absolute;
+      top: 3px;
+      right: 5px;
+      z-index: 3;
+      color: white;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+
+    .card-rank-top {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 1.05rem;
+      font-weight: bold;
       line-height: 1;
     }
 
-    .card-center {
-      display: flex;
-      height: 65px;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 2.2rem;
+    .card-symbol-top,
+    .card-symbol-bottom {
+      position: absolute;
+      z-index: 2;
+      display: block;
+      font-size: 1.2rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .card-symbol-top {
+      top: 5px;
+      right: 5px;
+    }
+
+    .card-symbol-bottom {
+      right: 5px;
+      bottom: 5px;
     }
 
     .card-fact {
       position: absolute;
+      top: 28%;
       right: 4px;
-      bottom: 4px;
+      bottom: 22%;
       left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
       color: #314666;
       text-align: center;
-      font-size: .57rem;
+      font-size: .68rem;
       font-weight: bold;
-      line-height: 1.05;
-    }
-
-    .card-suit-name {
-      position: absolute;
-      top: 7px;
-      right: 5px;
-      max-width: 48px;
-      color: #65738d;
-      text-align: right;
-      font-size: .48rem;
-      font-weight: bold;
-      line-height: 1;
+      line-height: 1.1;
     }
 
     .waste-card,
@@ -418,7 +520,6 @@
       left: 0;
     }
 
-    /* How to Play */
     .how-to-play {
       max-width: 800px;
       margin: 15px auto 0;
@@ -439,6 +540,92 @@
       padding-left: 22px;
     }
 
+    /* Victory reward animation */
+    .celebration-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .verse-rocket {
+      position: absolute;
+      bottom: -80px;
+      left: var(--left);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: rocketFly var(--duration) ease-out var(--delay) forwards;
+    }
+
+    .rocket-icon {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 7px var(--gold));
+    }
+
+    .rocket-verse,
+    .falling-verse {
+      max-width: 150px;
+      padding: 6px 8px;
+      color: var(--navy);
+      font-size: .68rem;
+      font-weight: bold;
+      line-height: 1.15;
+      text-align: center;
+      background: rgba(255,255,255,.94);
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.18);
+    }
+
+    .falling-verse {
+      position: absolute;
+      top: -100px;
+      left: var(--left);
+      animation: verseFall var(--duration) linear var(--delay) forwards;
+    }
+
+    @keyframes rocketFly {
+      0% {
+        transform: translateY(0) rotate(-8deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-115vh) rotate(8deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes verseFall {
+      0% {
+        transform: translateY(-20px) rotate(-8deg);
+        opacity: 0;
+      }
+
+      12% {
+        opacity: 1;
+      }
+
+      85% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(118vh) rotate(10deg);
+        opacity: 0;
+      }
+    }
+
     @keyframes floatUp {
       0%, 100% {
         transform: translateY(0);
@@ -451,24 +638,21 @@
 
     @media (max-width: 650px) {
       :root {
-        --card-width: 68px;
-        --card-height: 94px;
+        --card-width: clamp(32px, calc((100vw - 80px) / 7), 68px);
+        --card-height: calc(var(--card-width) * 1.36);
       }
 
       body {
         padding: 5px;
       }
 
-      header {
-        padding: 10px;
+      .game-shell {
+        border-width: 3px;
+        border-radius: 16px;
       }
 
-      header h1 {
-        font-size: 1.55rem;
-      }
-
-      header p {
-        font-size: .78rem;
+      .game-shell > header {
+        display: none;
       }
 
       main {
@@ -488,78 +672,96 @@
         font-size: .94rem;
       }
 
-      .status-row {
-        gap: 5px;
+      .devotion-panel {
+        height: 230px;
+        margin-bottom: 10px;
+        padding: 9px;
+        border-width: 3px;
+        border-radius: 13px;
       }
 
-      .status-card {
-        padding: 5px 2px;
-        font-size: .62rem;
+      .devotion-panel-title {
+        font-size: .8rem;
       }
 
-      .status-card strong {
-        font-size: .95rem;
+      .game-panel {
+        padding: 8px;
+        border-width: 2px;
+        border-radius: 13px;
       }
 
       .solitaire-board {
-        min-width: 635px;
-        padding: 10px;
+        padding: 7px;
+        border-width: 3px;
+        border-radius: 14px;
       }
 
       .top-row {
-        gap: 14px;
-        min-height: 101px;
-        margin-bottom: 12px;
+        gap: 4px;
+        min-height: calc(var(--card-height) + 8px);
+        margin-bottom: 9px;
       }
 
       .stock-area,
       .foundation-area {
-        gap: 7px;
-      }
-
-      .tableau {
-        gap: 8px;
-      }
-
-      .tableau-pile {
-        min-height: 250px;
+        gap: 3px;
       }
 
       .playing-card {
-        padding: 4px;
+        padding: 3px;
         border-width: 2px;
-        border-radius: 8px;
+        border-radius: 6px;
       }
 
-      .card-rank-top {
+      .playing-card.back::after {
+        inset: 9px;
+        font-size: 1.5rem;
+        border-width: 2px;
+      }
+
+      .playing-card.back.recycle-ready::before {
+        top: 1px;
+        right: 2px;
         font-size: .8rem;
       }
 
-      .card-symbol-top {
-        font-size: 1rem;
+      .card-rank-top {
+        top: 3px;
+        left: 3px;
+        font-size: .62rem;
       }
 
-      .card-center {
-        height: 49px;
-        font-size: 1.65rem;
+      .card-symbol-top,
+      .card-symbol-bottom {
+        font-size: .62rem;
+      }
+
+      .card-symbol-top {
+        top: 3px;
+        right: 3px;
+      }
+
+      .card-symbol-bottom {
+        right: 3px;
+        bottom: 3px;
       }
 
       .card-fact {
-        font-size: .44rem;
-      }
-
-      .card-suit-name {
-        font-size: .4rem;
+        top: 27%;
+        right: 2px;
+        bottom: 20%;
+        left: 2px;
+        font-size: .31rem;
       }
 
       .empty-foundation-label {
-        top: 25px;
-        font-size: .5rem;
+        top: 20%;
+        font-size: .4rem;
       }
 
       .empty-tableau-label {
-        top: 82px;
-        font-size: .52rem;
+        top: 55px;
+        font-size: .42rem;
       }
 
       button,
@@ -570,13 +772,38 @@
 
       .message,
       .how-to-play {
-        font-size: .85rem;
+        font-size: .82rem;
+      }
+
+      .move-success {
+        font-size: .78rem;
+      }
+
+      .move-verse {
+        font-size: .72rem;
+      }
+
+      .devotion-question {
+        padding: 5px 6px;
+        font-size: .63rem;
+      }
+
+      .rocket-icon {
+        font-size: 1.65rem;
+      }
+
+      .rocket-verse,
+      .falling-verse {
+        max-width: 110px;
+        font-size: .52rem;
       }
     }
   </style>
 </head>
 
 <body>
+  <div id="celebrationLayer" class="celebration-layer" aria-hidden="true"></div>
+
   <main class="app">
     <section class="game-shell">
       <header>
@@ -622,73 +849,71 @@
 
         <!-- Game Screen -->
         <section id="gameScreen" class="screen">
-          <div class="status-row">
-            <div class="status-card">
-              Moves
-              <strong id="movesDisplay">0</strong>
+          <section class="devotion-panel" aria-live="polite">
+            <div class="devotion-panel-title">
+              📖 Bible Verse and Salvation Reflection
             </div>
 
-            <div class="status-card">
-              Foundations
-              <strong><span id="foundationCount">0</span> / 52</strong>
+            <div id="gameMessage" class="message">
+              Tap, double-tap, or drag a face-up card to move it.
+            </div>
+          </section>
+
+          <section class="game-panel">
+            <div class="button-row" style="margin-bottom:12px;">
+              <button id="newGameBtn" class="green-button">
+                🔄 New Game
+              </button>
+
+              <button id="undoBtn" class="purple-button" disabled>
+                ↩ Undo
+              </button>
+
+              <button
+                id="autoFinishBtn"
+                class="gold-button"
+                disabled
+                title="Available after every bottom card is face up."
+              >
+                ✨ Auto Finish
+              </button>
+
+              <button id="helpBtn" class="blue-button">
+                ❔ How to Play
+              </button>
             </div>
 
-            <div class="status-card">
-              Theme
-              <strong>Jesus</strong>
-            </div>
+            <div class="board-scroll">
+              <section id="solitaireBoard" class="solitaire-board">
+                <div class="top-row">
+                  <div id="foundationArea" class="foundation-area"></div>
 
-            <div class="status-card">
-              Goal
-              <strong>Build 4 Piles</strong>
-            </div>
-          </div>
-
-          <div id="gameMessage" class="message">
-            Tap a face-up card to select it. Then tap where you want to move it.
-          </div>
-
-          <div class="button-row" style="margin-bottom:12px;">
-            <button id="newGameBtn" class="green-button">
-              🔄 New Game
-            </button>
-
-            <button id="clearSelectionBtn" class="purple-button">
-              ✖ Clear Selection
-            </button>
-
-            <button id="helpBtn" class="blue-button">
-              ❔ How to Play
-            </button>
-          </div>
-
-          <div class="board-scroll">
-            <section id="solitaireBoard" class="solitaire-board">
-              <div class="top-row">
-                <div class="stock-area">
-                  <div id="stockPile" class="pile-slot"></div>
-                  <div id="wastePile" class="pile-slot"></div>
+                  <div class="stock-area">
+                    <div id="wastePile" class="pile-slot"></div>
+                    <div id="stockPile" class="pile-slot"></div>
+                  </div>
                 </div>
 
-                <div id="foundationArea" class="foundation-area"></div>
-              </div>
+                <div id="tableauArea" class="tableau"></div>
+              </section>
+            </div>
 
-              <div id="tableauArea" class="tableau"></div>
+            <section id="howToPlayBox" class="how-to-play" style="display:none;">
+              <h3>How to Play</h3>
+
+              <ol>
+                <li>Tap a face-up card, then tap where it should go.</li>
+                <li>Double-click or double-tap a card for an automatic move.</li>
+                <li>You can also drag and drop face-up cards.</li>
+                <li>Tap a selected card again to clear selection.</li>
+                <li>Build bottom piles downward in alternating colors.</li>
+                <li>Only a King can move into an empty bottom pile.</li>
+                <li>Build each foundation from Ace to King by theme.</li>
+                <li>Tap the purple deck to draw a new card.</li>
+                <li>When the deck shows ↻, tap once to recycle cards.</li>
+                <li>Auto Finish activates after all bottom cards are face up.</li>
+              </ol>
             </section>
-          </div>
-
-          <section id="howToPlayBox" class="how-to-play" style="display:none;">
-            <h3>How to Play</h3>
-
-            <ol>
-              <li>Tap a face-up card to select it.</li>
-              <li>Tap another pile to move the selected card.</li>
-              <li>Build the seven bottom piles in descending number order.</li>
-              <li>Alternate red and dark cards in the bottom piles.</li>
-              <li>Only a King can move into an empty bottom pile.</li>
-              <li>Build the top foundation piles from Ace to King by matching theme.</li>
-              <li>Tap the purple card pile to draw a new card.</li>
-            </ol>
           </section>
         </section>
 
@@ -733,19 +958,9 @@
         name: "Promise & Birth",
         color: "red",
         facts: [
-          "Promise",
-          "Angel",
-          "Mary",
-          "Joseph",
-          "Bethlehem",
-          "Manger",
-          "Shepherds",
-          "Star",
-          "Wise Men",
-          "Nazareth",
-          "Good News",
-          "Emmanuel",
-          "Savior"
+          "Promise", "Angel", "Mary", "Joseph", "Bethlehem",
+          "Manger", "Shepherds", "Star", "Wise Men", "Nazareth",
+          "Good News", "Emmanuel", "Savior"
         ]
       },
       {
@@ -754,19 +969,9 @@
         name: "Teachings",
         color: "black",
         facts: [
-          "Baptism",
-          "Prayer",
-          "Parables",
-          "Faith",
-          "Mercy",
-          "Truth",
-          "Kingdom",
-          "Shepherd",
-          "Bread of Life",
-          "Light",
-          "Love God",
-          "Love Others",
-          "King Jesus"
+          "Baptism", "Prayer", "Parables", "Faith", "Mercy",
+          "Truth", "Kingdom", "Shepherd", "Bread of Life", "Light",
+          "Love God", "Love Others", "King Jesus"
         ]
       },
       {
@@ -775,19 +980,10 @@
         name: "Love & Miracles",
         color: "red",
         facts: [
-          "Love",
-          "Healing",
-          "Water to Wine",
-          "Calms Storm",
-          "Feeds Many",
-          "Walks on Water",
-          "Forgives",
-          "Blesses Children",
-          "Raises Lazarus",
-          "Serves Others",
-          "Compassion",
-          "Peace",
-          "Victory Love"
+          "Love", "Healing", "Water to Wine", "Calms Storm",
+          "Feeds Many", "Walks on Water", "Forgives",
+          "Blesses Children", "Raises Lazarus", "Serves Others",
+          "Compassion", "Peace", "Victory Love"
         ]
       },
       {
@@ -796,19 +992,10 @@
         name: "Cross & Resurrection",
         color: "black",
         facts: [
-          "Jerusalem",
-          "Last Supper",
-          "Garden Prayer",
-          "The Cross",
-          "Forgiveness",
-          "The Tomb",
-          "Risen Jesus",
-          "Emmaus Road",
-          "Great Commission",
-          "Ascension",
-          "Hope",
-          "Eternal Life",
-          "Risen King"
+          "Jerusalem", "Last Supper", "Garden Prayer", "The Cross",
+          "Forgiveness", "The Tomb", "Risen Jesus", "Emmaus Road",
+          "Great Commission", "Ascension", "Hope",
+          "Eternal Life", "Risen King"
         ]
       }
     ];
@@ -820,8 +1007,118 @@
       13: "K"
     };
 
+    const victoryVerses = [
+      "Jesus loves you — John 3:16",
+      "He is risen — Matthew 28:6",
+      "The Lord is my shepherd — Psalm 23:1",
+      "Be strong and courageous — Joshua 1:9",
+      "With God all things are possible — Matthew 19:26",
+      "The joy of the Lord is your strength — Nehemiah 8:10",
+      "Peace be with you — John 20:19",
+      "Nothing can separate us from God’s love — Romans 8:39"
+    ];
+
+    const moveVerses = [
+      "God is our refuge and strength. — Psalm 46:1",
+      "The Lord is near to all who call on Him. — Psalm 145:18",
+      "Jesus said, “I am the way, the truth, and the life.” — John 14:6",
+      "God demonstrates His love for us. — Romans 5:8",
+      "The Lord is my helper; I will not be afraid. — Hebrews 13:6",
+      "The Lord will fight for you; you need only to be still. — Exodus 14:14",
+      "I can do all things through Christ who gives me strength. — Philippians 4:13",
+      "For God so loved the world. — John 3:16",
+      "The joy of the Lord is your strength. — Nehemiah 8:10",
+      "The Lord is good, a refuge in times of trouble. — Nahum 1:7",
+      "Cast all your anxiety on Him because He cares for you. — 1 Peter 5:7",
+      "Trust in the Lord with all your heart. — Proverbs 3:5",
+      "My grace is sufficient for you. — 2 Corinthians 12:9",
+      "Be strong and courageous. — Joshua 1:9",
+      "The peace of God will guard your hearts and minds. — Philippians 4:7",
+      "The Lord is faithful to all His promises. — Psalm 145:13",
+      "Nothing can separate us from the love of God. — Romans 8:39",
+      "The Lord is my shepherd; I lack nothing. — Psalm 23:1",
+      "Come to Me, all who are weary. — Matthew 11:28",
+      "If God is for us, who can be against us? — Romans 8:31"
+    ];
+
+    const salvationQuestions = [
+      {
+        question: "Am I a sinner in need of saving?",
+        answer: "Romans 3:23 — recognizing that everyone falls short of God's perfect standard."
+      },
+      {
+        question: "Do I believe Jesus died and rose for me?",
+        answer: "John 3:16 — believing that Jesus Christ paid the penalty for your sins on the cross."
+      },
+      {
+        question: "Am I truly willing to turn away from my old way of living?",
+        answer: "2 Corinthians 5:17 — being ready for a complete spiritual transformation or “new creation.”"
+      },
+      {
+        question: "Can I earn salvation by being good enough?",
+        answer: "Ephesians 2:8–9 — salvation is God's gift through grace, not something earned by works."
+      },
+      {
+        question: "Who is Jesus Christ to me?",
+        answer: "John 1:14 — Jesus is God's Word who came to live among us full of grace and truth."
+      },
+      {
+        question: "Why did Jesus die on the cross?",
+        answer: "1 Peter 3:18 — Christ suffered once for sins to bring us to God."
+      },
+      {
+        question: "Have I placed my faith in Jesus?",
+        answer: "Romans 10:9 — confess Jesus as Lord and believe God raised Him from the dead."
+      },
+      {
+        question: "Do I believe God can forgive my sins?",
+        answer: "1 John 1:9 — when we confess our sins, God is faithful and just to forgive us."
+      },
+      {
+        question: "Am I allowing God to change my heart?",
+        answer: "Ezekiel 36:26 — God promises to give His people a new heart and a new spirit."
+      },
+      {
+        question: "Do I seek God when I feel worried or afraid?",
+        answer: "Philippians 4:6–7 — bring requests to God in prayer and receive His peace."
+      },
+      {
+        question: "Am I loving others as Jesus teaches?",
+        answer: "Mark 12:31 — love your neighbor as yourself."
+      },
+      {
+        question: "Do I trust God when I do not understand the future?",
+        answer: "Proverbs 3:5–6 — trust the Lord with all your heart and He will direct your path."
+      },
+      {
+        question: "Can Jesus help me resist temptation?",
+        answer: "1 Corinthians 10:13 — God provides a way to endure temptation."
+      },
+      {
+        question: "Do I know that God is with me in hard times?",
+        answer: "Isaiah 41:10 — do not fear, for God is with you and will strengthen you."
+      },
+      {
+        question: "What should my new life in Christ look like?",
+        answer: "Galatians 5:22–23 — the Spirit grows love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, and self-control."
+      },
+      {
+        question: "Have I received God's gift of eternal life?",
+        answer: "Romans 6:23 — eternal life is God's gift through Jesus Christ our Lord."
+      },
+      {
+        question: "Can I be sure Jesus will never leave me?",
+        answer: "Hebrews 13:5 — God promises never to leave or forsake His people."
+      },
+      {
+        question: "Am I willing to forgive others?",
+        answer: "Ephesians 4:32 — forgive one another as God forgave you in Christ."
+      }
+    ];
+
     let stock = [];
     let waste = [];
+
     let foundations = {
       birth: [],
       teachings: [],
@@ -832,20 +1129,30 @@
     let tableau = [[], [], [], [], [], [], []];
 
     let selected = null;
+    let draggedSource = null;
     let moves = 0;
+    let history = [];
+    let devotionIndex = 0;
+    let autoFinishTimer = null;
+    let autoFinishQueue = [];
+    let celebrationTimer = null;
+    let victoryTimer = null;
+    let victoryPending = false;
+    let boardLockHeight = 0;
 
     const startScreen = document.getElementById("startScreen");
     const gameScreen = document.getElementById("gameScreen");
     const victoryScreen = document.getElementById("victoryScreen");
 
-    const movesDisplay = document.getElementById("movesDisplay");
-    const foundationCount = document.getElementById("foundationCount");
     const gameMessage = document.getElementById("gameMessage");
-
     const stockPile = document.getElementById("stockPile");
     const wastePile = document.getElementById("wastePile");
     const foundationArea = document.getElementById("foundationArea");
     const tableauArea = document.getElementById("tableauArea");
+
+    const undoBtn = document.getElementById("undoBtn");
+    const autoFinishBtn = document.getElementById("autoFinishBtn");
+    const celebrationLayer = document.getElementById("celebrationLayer");
 
     function getRankLabel(rank) {
       return rankLabels[rank] || rank;
@@ -873,23 +1180,335 @@
     }
 
     function shuffle(deck) {
-      const newDeck = [...deck];
+      const copy = [...deck];
 
-      for (let i = newDeck.length - 1; i > 0; i--) {
+      for (let i = copy.length - 1; i > 0; i--) {
         const randomIndex = Math.floor(Math.random() * (i + 1));
 
-        [newDeck[i], newDeck[randomIndex]] =
-          [newDeck[randomIndex], newDeck[i]];
+        [copy[i], copy[randomIndex]] =
+          [copy[randomIndex], copy[i]];
       }
 
-      return newDeck;
+      return copy;
+    }
+
+    function copyCards(cards) {
+      return cards.map(card => ({ ...card }));
+    }
+
+    function getStackOffset() {
+      if (window.innerWidth <= 650) {
+        return Math.max(14, Math.min(20, window.innerWidth * 0.045));
+      }
+
+      return 21;
+    }
+
+    function getCardHeight() {
+      if (window.innerWidth <= 650) {
+        const cardWidth = Math.max(
+          32,
+          Math.min(68, (window.innerWidth - 80) / 7)
+        );
+
+        return cardWidth * 1.36;
+      }
+
+      return 116;
+    }
+
+    function showMoveDevotion(moveText) {
+      const verse =
+        moveVerses[devotionIndex % moveVerses.length];
+
+      const question =
+        salvationQuestions[
+          devotionIndex % salvationQuestions.length
+        ];
+
+      devotionIndex++;
+
+      gameMessage.className = "message";
+
+      gameMessage.innerHTML = `
+        <div class="move-success">${moveText}</div>
+
+        <div class="move-verse">
+          📖 ${verse}
+        </div>
+
+        <div class="devotion-question">
+          <strong>Think About It:</strong><br>
+          <strong>• ${question.question}</strong><br>
+          <span>${question.answer}</span>
+        </div>
+      `;
+    }
+
+    function saveUndoState() {
+      history.push({
+        stock: copyCards(stock),
+        waste: copyCards(waste),
+        foundations: {
+          birth: copyCards(foundations.birth),
+          teachings: copyCards(foundations.teachings),
+          love: copyCards(foundations.love),
+          cross: copyCards(foundations.cross)
+        },
+        tableau: tableau.map(pile => copyCards(pile)),
+        moves,
+        devotionIndex
+      });
+
+      if (history.length > 100) {
+        history.shift();
+      }
+    }
+
+    function undoLastMove() {
+      stopAutoFinish();
+
+      const previous = history.pop();
+
+      if (!previous) {
+        gameMessage.className = "message";
+        gameMessage.textContent = "There is no move to undo.";
+        renderGame();
+        return;
+      }
+
+      stock = copyCards(previous.stock);
+      waste = copyCards(previous.waste);
+
+      foundations = {
+        birth: copyCards(previous.foundations.birth),
+        teachings: copyCards(previous.foundations.teachings),
+        love: copyCards(previous.foundations.love),
+        cross: copyCards(previous.foundations.cross)
+      };
+
+      tableau = previous.tableau.map(pile => copyCards(pile));
+      moves = previous.moves;
+      devotionIndex = previous.devotionIndex || 0;
+      selected = null;
+
+      gameMessage.className = "message";
+      gameMessage.textContent = "Last move undone.";
+
+      renderGame();
+    }
+
+    function scoreTableauDeal(candidateTableau, candidateStock) {
+      const topCards = candidateTableau
+        .map(pile => pile[pile.length - 1])
+        .filter(Boolean);
+
+      let score = 0;
+
+      topCards.forEach(card => {
+        if (card.rank === 13) {
+          score += 2;
+        }
+
+        if (card.rank === 1 || card.rank === 2) {
+          score += 2;
+        }
+
+        topCards.forEach(destination => {
+          if (card.id === destination.id) {
+            return;
+          }
+
+          const movingSuit = getSuit(card.suit);
+          const destinationSuit = getSuit(destination.suit);
+
+          if (
+            card.rank === destination.rank - 1 &&
+            movingSuit.color !== destinationSuit.color
+          ) {
+            score += 10;
+          }
+        });
+      });
+
+      candidateStock.slice(-10).forEach(card => {
+        if (card.rank === 1) {
+          score += 2;
+        }
+
+        if (card.rank === 2) {
+          score += 1;
+        }
+      });
+
+      return score + Math.random();
+    }
+
+    function createFriendlyDeal() {
+      const deals = [];
+
+      for (let attempt = 0; attempt < 260; attempt++) {
+        const deck = shuffle(createDeck()).map(card => ({
+          ...card,
+          faceUp: false
+        }));
+
+        const candidateTableau = [[], [], [], [], [], [], []];
+
+        for (let pileIndex = 0; pileIndex < 7; pileIndex++) {
+          for (let cardIndex = 0; cardIndex <= pileIndex; cardIndex++) {
+            const card = deck.pop();
+
+            card.faceUp = cardIndex === pileIndex;
+            candidateTableau[pileIndex].push(card);
+          }
+        }
+
+        const candidateStock = deck.map(card => ({
+          ...card,
+          faceUp: false
+        }));
+
+        deals.push({
+          score: scoreTableauDeal(candidateTableau, candidateStock),
+          tableau: candidateTableau.map(pile => copyCards(pile)),
+          stock: copyCards(candidateStock)
+        });
+      }
+
+      deals.sort((first, second) => second.score - first.score);
+
+      const topDeals = deals.slice(0, 12);
+
+      const chosenDeal =
+        topDeals[Math.floor(Math.random() * topDeals.length)];
+
+      if (Math.random() < 0.8) {
+        const helpfulCardCount =
+          Math.random() < 0.55 ? 1 : 2;
+
+        for (let count = 0; count < helpfulCardCount; count++) {
+          const helpfulCards = chosenDeal.stock.filter(card =>
+            card.rank === 1 || card.rank === 2
+          );
+
+          if (helpfulCards.length === 0) {
+            break;
+          }
+
+          const helpfulCard =
+            helpfulCards[
+              Math.floor(Math.random() * helpfulCards.length)
+            ];
+
+          const originalIndex = chosenDeal.stock.findIndex(card =>
+            card.id === helpfulCard.id
+          );
+
+          chosenDeal.stock.splice(originalIndex, 1);
+
+          const distanceFromTop =
+            3 + Math.floor(Math.random() * 12);
+
+          const insertIndex = Math.max(
+            0,
+            chosenDeal.stock.length - distanceFromTop
+          );
+
+          chosenDeal.stock.splice(insertIndex, 0, helpfulCard);
+        }
+      }
+
+      return {
+        tableau: chosenDeal.tableau,
+        stock: chosenDeal.stock
+      };
+    }
+
+    function stopAutoFinish() {
+      clearInterval(autoFinishTimer);
+      autoFinishTimer = null;
+      autoFinishQueue = [];
+    }
+
+    function stopCelebration() {
+      clearTimeout(celebrationTimer);
+      clearTimeout(victoryTimer);
+      celebrationLayer.innerHTML = "";
+      victoryPending = false;
+    }
+
+    function launchVictoryCelebration() {
+      celebrationLayer.innerHTML = "";
+
+      for (let index = 0; index < 10; index++) {
+        const rocket = document.createElement("div");
+        const icon = document.createElement("div");
+        const verse = document.createElement("div");
+
+        rocket.className = "verse-rocket";
+        rocket.style.setProperty(
+          "--left",
+          `${5 + Math.random() * 90}%`
+        );
+        rocket.style.setProperty(
+          "--duration",
+          `${3.8 + Math.random() * 2}s`
+        );
+        rocket.style.setProperty(
+          "--delay",
+          `${Math.random() * 2}s`
+        );
+
+        icon.className = "rocket-icon";
+        icon.textContent = index % 2 === 0 ? "🚀✝️" : "⭐🚀";
+
+        verse.className = "rocket-verse";
+        verse.textContent =
+          victoryVerses[index % victoryVerses.length];
+
+        rocket.appendChild(icon);
+        rocket.appendChild(verse);
+        celebrationLayer.appendChild(rocket);
+      }
+
+      for (let index = 0; index < 18; index++) {
+        const fallingVerse = document.createElement("div");
+
+        fallingVerse.className = "falling-verse";
+        fallingVerse.style.setProperty(
+          "--left",
+          `${Math.random() * 85}%`
+        );
+        fallingVerse.style.setProperty(
+          "--duration",
+          `${4 + Math.random() * 3}s`
+        );
+        fallingVerse.style.setProperty(
+          "--delay",
+          `${Math.random() * 3}s`
+        );
+
+        fallingVerse.textContent =
+          victoryVerses[index % victoryVerses.length];
+
+        celebrationLayer.appendChild(fallingVerse);
+      }
+
+      celebrationTimer = setTimeout(() => {
+        celebrationLayer.innerHTML = "";
+      }, 8500);
     }
 
     function newGame() {
-      const deck = shuffle(createDeck());
+      stopAutoFinish();
+      stopCelebration();
 
-      stock = [];
+      const friendlyDeal = createFriendlyDeal();
+
+      stock = friendlyDeal.stock;
       waste = [];
+      tableau = friendlyDeal.tableau;
 
       foundations = {
         birth: [],
@@ -898,76 +1517,80 @@
         cross: []
       };
 
-      tableau = [[], [], [], [], [], [], []];
-
       selected = null;
+      draggedSource = null;
       moves = 0;
+      history = [];
+      devotionIndex = 0;
 
-      /*
-        Deal seven Solitaire piles.
-        Each pile has one more card than the pile before it.
-      */
-      for (let pileIndex = 0; pileIndex < 7; pileIndex++) {
-        for (let cardIndex = 0; cardIndex <= pileIndex; cardIndex++) {
-          const card = deck.pop();
+      boardLockHeight =
+        window.innerWidth <= 650 ? 680 : 780;
 
-          card.faceUp = cardIndex === pileIndex;
-          tableau[pileIndex].push(card);
-        }
-      }
-
-      stock = deck.map(card => ({
-        ...card,
-        faceUp: false
-      }));
-
-      gameMessage.className = "message";
+      gameMessage.className = "message win";
       gameMessage.textContent =
-        "Tap a face-up card to select it. Then tap a card pile to move it.";
+        "New shuffled game ready! This deal was chosen to give you helpful opening moves.";
 
       renderGame();
     }
 
-    function renderGame() {
-      movesDisplay.textContent = moves;
+    function areAllCardsFaceUp() {
+      return tableau.every(pile =>
+        pile.every(card => card.faceUp)
+      );
+    }
 
-      const totalFoundationCards =
+    function getFoundationCardCount() {
+      return (
         foundations.birth.length +
         foundations.teachings.length +
         foundations.love.length +
-        foundations.cross.length;
+        foundations.cross.length
+      );
+    }
 
-      foundationCount.textContent = totalFoundationCards;
+    function isAutoFinishReady() {
+      return (
+        !victoryPending &&
+        areAllCardsFaceUp() &&
+        getFoundationCardCount() < 52
+      );
+    }
+
+    function renderGame() {
+      undoBtn.disabled = history.length === 0;
+      autoFinishBtn.disabled = !isAutoFinishReady();
 
       renderStock();
       renderWaste();
       renderFoundations();
       renderTableau();
 
-      if (totalFoundationCards === 52) {
+      if (getFoundationCardCount() === 52) {
         showVictory();
       }
     }
 
- function renderStock() {
-  stockPile.innerHTML = "";
+    function renderStock() {
+      stockPile.innerHTML = "";
 
-  /*
-    Always show the purple deck.
-    Even when the stock is empty, clicking it will
-    recycle the waste cards and draw again.
-  */
-  const backCard = document.createElement("button");
+      const backCard = document.createElement("button");
 
-  backCard.className = "playing-card back";
-  backCard.setAttribute("aria-label", "Draw a card");
-  backCard.style.top = "0px";
-  backCard.style.zIndex = "2";
+      backCard.className = "playing-card back";
+      backCard.style.top = "0px";
+      backCard.style.zIndex = "2";
 
-  backCard.addEventListener("click", drawCard);
+      if (stock.length === 0 && waste.length > 0) {
+        backCard.classList.add("recycle-ready");
+        backCard.setAttribute("aria-label", "Recycle used cards");
+        backCard.title = "Recycle used cards";
+      } else {
+        backCard.setAttribute("aria-label", "Draw a card");
+        backCard.title = "Draw a card";
+      }
 
-  stockPile.appendChild(backCard);
-}
+      backCard.addEventListener("click", drawCard);
+      stockPile.appendChild(backCard);
+    }
 
     function renderWaste() {
       wastePile.innerHTML = "";
@@ -976,7 +1599,7 @@
 
       if (!topCard) {
         wastePile.innerHTML =
-          '<span class="empty-foundation-label">Draw<br>Card</span>';
+          '<span class="empty-foundation-label">Choose<br>Card</span>';
         return;
       }
 
@@ -990,6 +1613,41 @@
 
       cardElement.classList.add("waste-card");
       wastePile.appendChild(cardElement);
+    }
+
+    function addDropEvents(element, destinationType, destinationValue) {
+      element.addEventListener("dragover", event => {
+        if (!draggedSource) {
+          return;
+        }
+
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        element.classList.add("drag-over");
+      });
+
+      element.addEventListener("dragleave", () => {
+        element.classList.remove("drag-over");
+      });
+
+      element.addEventListener("drop", event => {
+        event.preventDefault();
+        element.classList.remove("drag-over");
+
+        if (!draggedSource) {
+          return;
+        }
+
+        selected = draggedSource;
+
+        if (destinationType === "foundation") {
+          tryMoveToFoundation(destinationValue);
+        } else {
+          tryMoveToTableau(destinationValue);
+        }
+
+        draggedSource = null;
+      });
     }
 
     function renderFoundations() {
@@ -1025,13 +1683,16 @@
           foundationPile.appendChild(label);
         }
 
-        foundationPile.addEventListener("click", (event) => {
-          if (event.target === foundationPile ||
-              event.target.classList.contains("empty-foundation-label")) {
+        foundationPile.addEventListener("click", event => {
+          if (
+            event.target === foundationPile ||
+            event.target.classList.contains("empty-foundation-label")
+          ) {
             tryMoveToFoundation(suit.id);
           }
         });
 
+        addDropEvents(foundationPile, "foundation", suit.id);
         foundationArea.appendChild(foundationPile);
       });
     }
@@ -1039,10 +1700,32 @@
     function renderTableau() {
       tableauArea.innerHTML = "";
 
+      const stackOffset = getStackOffset();
+      const cardHeight = getCardHeight();
+
+      if (!boardLockHeight) {
+        boardLockHeight =
+          window.innerWidth <= 650 ? 680 : 780;
+      }
+
+      let tallestPileHeight = boardLockHeight;
+
       tableau.forEach((pile, pileIndex) => {
         const pileElement = document.createElement("div");
 
         pileElement.className = "tableau-pile";
+
+        const pileHeight = Math.max(
+          cardHeight + 15,
+          cardHeight + Math.max(0, pile.length - 1) * stackOffset + 12
+        );
+
+        tallestPileHeight = Math.max(
+          tallestPileHeight,
+          pileHeight
+        );
+
+        pileElement.style.minHeight = `${pileHeight}px`;
 
         if (pile.length === 0) {
           pileElement.classList.add("empty");
@@ -1064,21 +1747,31 @@
             }
           );
 
-          cardElement.style.top = `${cardIndex * 27}px`;
+          cardElement.style.top = `${cardIndex * stackOffset}px`;
           cardElement.style.zIndex = cardIndex + 1;
 
           pileElement.appendChild(cardElement);
         });
 
-        pileElement.addEventListener("click", (event) => {
-          if (event.target === pileElement ||
-              event.target.classList.contains("empty-tableau-label")) {
+        pileElement.addEventListener("click", event => {
+          if (
+            event.target === pileElement ||
+            event.target.classList.contains("empty-tableau-label")
+          ) {
             tryMoveToTableau(pileIndex);
           }
         });
 
+        addDropEvents(pileElement, "tableau", pileIndex);
         tableauArea.appendChild(pileElement);
       });
+
+      boardLockHeight = Math.max(
+        boardLockHeight,
+        tallestPileHeight
+      );
+
+      tableauArea.style.minHeight = `${boardLockHeight}px`;
     }
 
     function createCardElement(card, source) {
@@ -1089,7 +1782,7 @@
         button.className = "playing-card back";
         button.setAttribute("aria-label", "Face-down card");
 
-        button.addEventListener("click", (event) => {
+        button.addEventListener("click", event => {
           event.stopPropagation();
           flipTableauCard(source);
         });
@@ -1098,7 +1791,11 @@
       }
 
       button.className =
-        `playing-card ${suit.color === "red" ? "red-suit" : "black-suit"}`;
+        `playing-card suit-${suit.id} ${
+          suit.color === "red" ? "red-suit" : "black-suit"
+        }`;
+
+      button.draggable = true;
 
       if (isSelected(source)) {
         button.classList.add("selected");
@@ -1112,23 +1809,48 @@
       button.innerHTML = `
         <div class="card-rank-top">${getRankLabel(card.rank)}</div>
         <span class="card-symbol-top">${suit.symbol}</span>
-        <span class="card-suit-name">${suit.name}</span>
-        <div class="card-center">${suit.symbol}</div>
         <div class="card-fact">${suit.facts[card.rank - 1]}</div>
+        <span class="card-symbol-bottom">${suit.symbol}</span>
       `;
 
-      button.addEventListener("click", (event) => {
+      button.addEventListener("click", event => {
         event.stopPropagation();
         handleCardClick(source);
+      });
+
+      button.addEventListener("dblclick", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        tryAutoMove(source);
+      });
+
+      button.addEventListener("dragstart", event => {
+        draggedSource = source;
+        button.classList.add("dragging");
+
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData(
+          "text/plain",
+          JSON.stringify(source)
+        );
+      });
+
+      button.addEventListener("dragend", () => {
+        button.classList.remove("dragging");
+        draggedSource = null;
+
+        document.querySelectorAll(".drag-over").forEach(element => {
+          element.classList.remove("drag-over");
+        });
       });
 
       return button;
     }
 
     function isSelected(source) {
-      if (!selected) return false;
-
-      if (selected.type !== source.type) return false;
+      if (!selected || selected.type !== source.type) {
+        return false;
+      }
 
       if (source.type === "tableau") {
         return (
@@ -1141,11 +1863,7 @@
         return selected.suit === source.suit;
       }
 
-      if (source.type === "waste") {
-        return true;
-      }
-
-      return false;
+      return source.type === "waste";
     }
 
     function getCardFromSource(source) {
@@ -1182,23 +1900,129 @@
       return [];
     }
 
+    function sameSource(first, second) {
+      if (first.type !== second.type) {
+        return false;
+      }
+
+      if (first.type === "waste") {
+        return true;
+      }
+
+      if (first.type === "foundation") {
+        return first.suit === second.suit;
+      }
+
+      return (
+        first.pileIndex === second.pileIndex &&
+        first.cardIndex === second.cardIndex
+      );
+    }
+
+    function canMoveToFoundation(source, destinationSuitId) {
+      const movingCards = getCardsFromSource(source);
+
+      if (movingCards.length !== 1) {
+        return false;
+      }
+
+      const movingCard = movingCards[0];
+      const foundationPile = foundations[destinationSuitId];
+
+      return (
+        movingCard.suit === destinationSuitId &&
+        movingCard.rank === foundationPile.length + 1
+      );
+    }
+
+    function canMoveToTableau(source, destinationPileIndex) {
+      const movingCards = getCardsFromSource(source);
+
+      if (movingCards.length === 0) {
+        return false;
+      }
+
+      if (
+        source.type === "tableau" &&
+        source.pileIndex === destinationPileIndex
+      ) {
+        return false;
+      }
+
+      const firstMovingCard = movingCards[0];
+      const destinationPile = tableau[destinationPileIndex];
+      const destinationTopCard =
+        destinationPile[destinationPile.length - 1];
+
+      if (!destinationTopCard) {
+        return firstMovingCard.rank === 13;
+      }
+
+      const movingSuit = getSuit(firstMovingCard.suit);
+      const destinationSuit = getSuit(destinationTopCard.suit);
+
+      return (
+        destinationTopCard.faceUp &&
+        firstMovingCard.rank === destinationTopCard.rank - 1 &&
+        movingSuit.color !== destinationSuit.color
+      );
+    }
+
+    function tryAutoMove(source) {
+      const movingCards = getCardsFromSource(source);
+
+      if (movingCards.length === 0) {
+        return;
+      }
+
+      const firstMovingCard = movingCards[0];
+
+      if (
+        movingCards.length === 1 &&
+        canMoveToFoundation(source, firstMovingCard.suit)
+      ) {
+        selected = source;
+        tryMoveToFoundation(firstMovingCard.suit);
+        return;
+      }
+
+      const destinationPileIndex = tableau.findIndex((pile, index) =>
+        canMoveToTableau(source, index)
+      );
+
+      if (destinationPileIndex !== -1) {
+        selected = source;
+        tryMoveToTableau(destinationPileIndex);
+        return;
+      }
+
+      selected = source;
+
+      gameMessage.className = "message";
+      gameMessage.textContent =
+        "No automatic move is available. Tap or drag the card to a valid pile.";
+
+      renderGame();
+    }
+
     function handleCardClick(source) {
       const card = getCardFromSource(source);
 
-      if (!card || !card.faceUp) return;
+      if (!card || !card.faceUp) {
+        return;
+      }
 
-      /*
-        If a card is already selected, tapping a card on
-        another pile attempts to move it there.
-      */
+      if (selected && sameSource(selected, source)) {
+        selected = null;
+
+        gameMessage.className = "message";
+        gameMessage.textContent = "Selection cleared.";
+
+        renderGame();
+        return;
+      }
+
       if (selected) {
-        if (sameSource(selected, source)) {
-          selected = null;
-          gameMessage.textContent = "Selection cleared.";
-          renderGame();
-          return;
-        }
-
         if (source.type === "foundation") {
           tryMoveToFoundation(source.suit);
           return;
@@ -1219,46 +2043,33 @@
 
       gameMessage.className = "message";
       gameMessage.textContent =
-        "Card selected. Tap a pile or foundation where you want to move it.";
+        "Card selected. Tap a destination, double-tap, or drag the card.";
 
       renderGame();
     }
 
-    function sameSource(first, second) {
-      if (first.type !== second.type) return false;
-
-      if (first.type === "waste") return true;
-
-      if (first.type === "foundation") {
-        return first.suit === second.suit;
-      }
-
-      if (first.type === "tableau") {
-        return (
-          first.pileIndex === second.pileIndex &&
-          first.cardIndex === second.cardIndex
-        );
-      }
-
-      return false;
-    }
-
     function flipTableauCard(source) {
       if (selected) {
+        gameMessage.className = "message";
         gameMessage.textContent =
-          "Clear your selected card before flipping another card.";
+          "Tap your selected card again to clear it before flipping another card.";
         return;
       }
 
-      if (source.type !== "tableau") return;
+      if (source.type !== "tableau") {
+        return;
+      }
 
       const pile = tableau[source.pileIndex];
       const isTopCard = source.cardIndex === pile.length - 1;
 
-      if (!isTopCard) return;
+      if (!isTopCard) {
+        return;
+      }
+
+      saveUndoState();
 
       pile[source.cardIndex].faceUp = true;
-
       moves++;
 
       gameMessage.className = "message win";
@@ -1270,52 +2081,36 @@
 
     function tryMoveToTableau(destinationPileIndex) {
       if (!selected) {
-        gameMessage.textContent =
-          "Select a face-up card first.";
+        gameMessage.className = "message";
+        gameMessage.textContent = "Select or drag a face-up card first.";
         return;
       }
 
       const movingCards = getCardsFromSource(selected);
 
-      if (movingCards.length === 0) return;
+      if (movingCards.length === 0) {
+        return;
+      }
 
-      const firstMovingCard = movingCards[0];
-      const destinationPile = tableau[destinationPileIndex];
-      const destinationTopCard =
-        destinationPile[destinationPile.length - 1];
-
-      /*
-        Do not move cards onto the same tableau pile.
-      */
       if (
         selected.type === "tableau" &&
         selected.pileIndex === destinationPileIndex
       ) {
-        gameMessage.textContent =
-          "Choose a different card pile.";
+        gameMessage.className = "message";
+        gameMessage.textContent = "Choose a different card pile.";
         return;
       }
 
-      let validMove = false;
-
-      if (!destinationTopCard) {
-        validMove = firstMovingCard.rank === 13;
-      } else {
-        const movingSuit = getSuit(firstMovingCard.suit);
-        const destinationSuit = getSuit(destinationTopCard.suit);
-
-        validMove =
-          destinationTopCard.faceUp &&
-          firstMovingCard.rank === destinationTopCard.rank - 1 &&
-          movingSuit.color !== destinationSuit.color;
-      }
-
-      if (!validMove) {
+      if (!canMoveToTableau(selected, destinationPileIndex)) {
+        gameMessage.className = "message";
         gameMessage.textContent =
           "Cards must go down in number and alternate red and dark colors.";
         return;
       }
 
+      const destinationPile = tableau[destinationPileIndex];
+
+      saveUndoState();
       removeCardsFromSource(selected);
 
       movingCards.forEach(card => {
@@ -1326,26 +2121,24 @@
       selected = null;
       moves++;
 
-      gameMessage.className = "message win";
-      gameMessage.textContent =
-        "Great move! Keep building the card piles.";
+      showMoveDevotion(
+        "Great move! You built a card pile in the correct order."
+      );
 
       renderGame();
     }
 
     function tryMoveToFoundation(destinationSuitId) {
       if (!selected) {
-        gameMessage.textContent =
-          "Select a card first.";
+        gameMessage.className = "message";
+        gameMessage.textContent = "Select or drag a card first.";
         return;
       }
 
       const movingCards = getCardsFromSource(selected);
 
-      /*
-        Only one card can move to a foundation at a time.
-      */
       if (movingCards.length !== 1) {
+        gameMessage.className = "message";
         gameMessage.textContent =
           "Move one card at a time to the foundation.";
         return;
@@ -1355,17 +2148,20 @@
       const foundationPile = foundations[destinationSuitId];
 
       if (movingCard.suit !== destinationSuitId) {
+        gameMessage.className = "message";
         gameMessage.textContent =
           "Foundation cards must match the same Bible theme.";
         return;
       }
 
       if (movingCard.rank !== foundationPile.length + 1) {
+        gameMessage.className = "message";
         gameMessage.textContent =
           "Build each foundation from Ace to King.";
         return;
       }
 
+      saveUndoState();
       removeCardsFromSource(selected);
 
       movingCard.faceUp = true;
@@ -1374,9 +2170,9 @@
       selected = null;
       moves++;
 
-      gameMessage.className = "message win";
-      gameMessage.textContent =
-        `Wonderful! ${getSuit(destinationSuitId).name} foundation is growing.`;
+      showMoveDevotion(
+        `Wonderful! The ${getSuit(destinationSuitId).name} foundation is growing.`
+      );
 
       renderGame();
     }
@@ -1397,103 +2193,224 @@
       }
     }
 
-   function drawCard() {
-  /*
-    Easy play:
-    Automatically clear any selected card so the child
-    can always click the purple deck for another card.
-  */
-  selected = null;
+    function drawCard() {
+      selected = null;
 
-  /*
-    If the purple deck is empty, recycle all used cards.
-  */
-  if (stock.length === 0 && waste.length > 0) {
-    stock = waste
-      .reverse()
-      .map(card => ({
-        ...card,
-        faceUp: false
-      }));
+      if (stock.length === 0 && waste.length > 0) {
+        saveUndoState();
 
-    waste = [];
+        stock = [...waste]
+          .reverse()
+          .map(card => ({
+            ...card,
+            faceUp: false
+          }));
 
-    gameMessage.className = "message win";
-    gameMessage.textContent =
-      "Cards recycled! Here is another card to help you play.";
-  }
+        waste = [];
 
-  /*
-    If every card has been moved out of the deck and waste,
-    there is nothing more to draw.
-  */
-  if (stock.length === 0) {
-    gameMessage.className = "message";
-    gameMessage.textContent =
-      "No more cards to draw right now. Try moving cards from the bottom piles.";
-
-    renderGame();
-    return;
-  }
-
-  /*
-    Draw one new card from the purple deck.
-  */
-  const card = stock.pop();
-
-  card.faceUp = true;
-  waste.push(card);
-
-  moves++;
-
-  gameMessage.className = "message";
-  gameMessage.textContent =
-    "New Bible card drawn! Tap it, then move it to a bottom pile or foundation.";
-
-  renderGame();
-}
-
-    function recycleWaste() {
-      if (selected) {
+        gameMessage.className = "message win";
         gameMessage.textContent =
-          "Clear your selection before recycling cards.";
+          "↻ Cards are recycled into the purple back deck. Tap the deck again to begin drawing repeated cards.";
+
+        renderGame();
         return;
       }
 
-      if (waste.length === 0) {
+      if (stock.length === 0 && waste.length === 0) {
+        gameMessage.className = "message";
         gameMessage.textContent =
-          "There are no cards to recycle.";
+          "No more cards are available to draw. Move cards to the foundations.";
+
+        renderGame();
         return;
       }
 
-      stock = waste
-        .reverse()
-        .map(card => ({
-          ...card,
-          faceUp: false
-        }));
+      saveUndoState();
 
-      waste = [];
+      const card = stock.pop();
+
+      card.faceUp = true;
+      waste.push(card);
 
       moves++;
 
       gameMessage.className = "message";
       gameMessage.textContent =
-        "Cards recycled. Tap the purple pile to draw again.";
+        "New Bible card drawn! Tap, double-tap, or drag it to a pile.";
 
       renderGame();
     }
 
-    function showVictory() {
-      gameScreen.classList.remove("active");
-      victoryScreen.classList.add("active");
+    function findAutoSource(suitId, rank) {
+      const stockIndex = stock.findIndex(card =>
+        card.suit === suitId && card.rank === rank
+      );
 
-      document.getElementById("victoryText").innerHTML = `
-        You built all four Jesus Savior foundations in
-        <strong>${moves}</strong> moves!<br><br>
-        You completed the Promise & Birth, Teachings,
-        Love & Miracles, and Cross & Resurrection card piles.
-      `;
+      if (stockIndex !== -1) {
+        return {
+          type: "auto-stock",
+          cardIndex: stockIndex
+        };
+      }
+
+      const wasteIndex = waste.findIndex(card =>
+        card.suit === suitId && card.rank === rank
+      );
+
+      if (wasteIndex !== -1) {
+        return {
+          type: "auto-waste",
+          cardIndex: wasteIndex
+        };
+      }
+
+      for (let pileIndex = 0; pileIndex < tableau.length; pileIndex++) {
+        const cardIndex = tableau[pileIndex].findIndex(card =>
+          card.suit === suitId && card.rank === rank
+        );
+
+        if (cardIndex !== -1) {
+          return {
+            type: "auto-tableau",
+            pileIndex,
+            cardIndex
+          };
+        }
+      }
+
+      return null;
+    }
+
+    function removeAutoCard(source) {
+      if (source.type === "auto-stock") {
+        return stock.splice(source.cardIndex, 1)[0];
+      }
+
+      if (source.type === "auto-waste") {
+        return waste.splice(source.cardIndex, 1)[0];
+      }
+
+      if (source.type === "auto-tableau") {
+        return tableau[source.pileIndex].splice(source.cardIndex, 1)[0];
+      }
+
+      return null;
+    }
+
+    function buildAutoFinishQueue() {
+      const queue = [];
+
+      suits.forEach(suit => {
+        const nextRank = foundations[suit.id].length + 1;
+
+        for (let rank = nextRank; rank <= 13; rank++) {
+          queue.push({
+            suitId: suit.id,
+            rank
+          });
+        }
+      });
+
+      return queue;
+    }
+
+    function moveAutoFinishCard(item) {
+      const source = findAutoSource(item.suitId, item.rank);
+
+      if (!source) {
+        return false;
+      }
+
+      const card = removeAutoCard(source);
+
+      if (!card) {
+        return false;
+      }
+
+      card.faceUp = true;
+      foundations[item.suitId].push(card);
+      moves++;
+
+      showMoveDevotion(
+        `✨ Auto Finish moved ${getRankLabel(card.rank)} ${getSuit(card.suit).symbol} to the ${getSuit(card.suit).name} foundation.`
+      );
+
+      return true;
+    }
+
+    function autoFinishGame() {
+      if (!isAutoFinishReady()) {
+        gameMessage.className = "message";
+        gameMessage.textContent =
+          "Auto Finish becomes available after all seven bottom piles are face up.";
+
+        renderGame();
+        return;
+      }
+
+      stopAutoFinish();
+      saveUndoState();
+
+      selected = null;
+      autoFinishBtn.disabled = true;
+      undoBtn.disabled = true;
+
+      autoFinishQueue = buildAutoFinishQueue();
+
+      gameMessage.className = "message win";
+      gameMessage.textContent =
+        "✨ Auto Finish is gathering all remaining cards and building the foundations...";
+
+      autoFinishTimer = setInterval(() => {
+        if (autoFinishQueue.length === 0) {
+          stopAutoFinish();
+          renderGame();
+          return;
+        }
+
+        const nextCard = autoFinishQueue.shift();
+        const moved = moveAutoFinishCard(nextCard);
+
+        if (!moved) {
+          stopAutoFinish();
+
+          gameMessage.className = "message";
+          gameMessage.textContent =
+            "Auto Finish could not find one of the remaining cards.";
+
+          renderGame();
+          return;
+        }
+
+        renderGame();
+      }, 350);
+    }
+
+    function showVictory() {
+      if (victoryPending) {
+        return;
+      }
+
+      victoryPending = true;
+      stopAutoFinish();
+
+      gameMessage.className = "message win";
+      gameMessage.textContent =
+        "You won! Enjoy the Bible verse celebration before the reward screen opens.";
+
+      launchVictoryCelebration();
+
+      victoryTimer = setTimeout(() => {
+        gameScreen.classList.remove("active");
+        victoryScreen.classList.add("active");
+
+        document.getElementById("victoryText").innerHTML = `
+          You built all four Jesus Savior foundations in
+          <strong>${moves}</strong> moves!<br><br>
+          You completed the Promise & Birth, Teachings,
+          Love & Miracles, and Cross & Resurrection card piles.
+        `;
+      }, 8500);
     }
 
     document.getElementById("startBtn").addEventListener("click", () => {
@@ -1510,14 +2427,8 @@
       }
     });
 
-    document.getElementById("clearSelectionBtn").addEventListener("click", () => {
-      selected = null;
-
-      gameMessage.className = "message";
-      gameMessage.textContent = "Selection cleared.";
-
-      renderGame();
-    });
+    undoBtn.addEventListener("click", undoLastMove);
+    autoFinishBtn.addEventListener("click", autoFinishGame);
 
     document.getElementById("helpBtn").addEventListener("click", () => {
       const helpBox = document.getElementById("howToPlayBox");
@@ -1527,10 +2438,17 @@
     });
 
     document.getElementById("playAgainBtn").addEventListener("click", () => {
+      stopCelebration();
       victoryScreen.classList.remove("active");
       gameScreen.classList.add("active");
 
       newGame();
+    });
+
+    window.addEventListener("resize", () => {
+      if (gameScreen.classList.contains("active")) {
+        renderGame();
+      }
     });
   </script>
 </body>
