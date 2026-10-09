@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Jesus Savior Solitaire</title>
+
+  <style>
+    :root {
+      --navy: #10265d;
+      --blue: #2b7bd7;
+      --gold: #ffd83d;
+      --green: #249d48;
+      --purple: #7547ae;
+      --red: #bd3131;
+      --cream: #fffbed;
+      --table: #197649;
+      --table-dark: #105b37;
+      --card-width: 86px;
+      --card-height: 116px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #17213d;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(255,255,255,.85) 0 2%, transparent 2.5%),
+        radial-gradient(circle at 86% 12%, rgba(255,255,255,.8) 0 2%, transparent 2.5%),
+        linear-gradient(#73cdf8 0%, #c9efff 52%, #fff2a7 100%);
+      padding: 12px;
+    }
+
+    .app {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .game-shell {
+      overflow: hidden;
+      background: rgba(255,255,255,.96);
+      border: 5px solid white;
+      border-radius: 25px;
+      box-shadow: 0 14px 35px rgba(17, 38, 91, .25);
+    }
+
+    header {
+      padding: 16px;
+      color: white;
+      text-align: center;
+      background: linear-gradient(135deg, var(--navy), var(--purple));
+    }
+
+    header h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.7rem, 5vw, 2.6rem);
+    }
+
+    header p {
+      margin: 7px 0 0;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 18px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .card-box {
+      max-width: 800px;
+      margin: 0 auto 16px;
+      padding: 20px;
+      text-align: center;
+      background: var(--cream);
+      border: 4px solid #f0d467;
+      border-radius: 20px;
+      box-shadow: 0 5px 12px rgba(0,0,0,.10);
+    }
+
+    .hero-icon {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 5rem;
+      animation: floatUp 2s ease-in-out infinite;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--navy);
+    }
+
+    .intro {
+      max-width: 650px;
+      margin: 0 auto 18px;
+      font-size: 1.08rem;
+      line-height: 1.5;
+    }
+
+    button,
+    .button-link {
+      display: inline-block;
+      border: none;
+      border-radius: 11px;
+      padding: 11px 15px;
+      color: white;
+      font-size: .95rem;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .15s, filter .15s;
+    }
+
+    button:hover:not(:disabled),
+    .button-link:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.08);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+    }
+
+    .green-button {
+      background: var(--green);
+    }
+
+    .blue-button {
+      background: var(--blue);
+    }
+
+    .purple-button {
+      background: var(--purple);
+    }
+
+    .navy-button {
+      background: var(--navy);
+    }
+
+    .gold-button {
+      color: var(--navy);
+      background: var(--gold);
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    /* Score / Status Area */
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      max-width: 800px;
+      margin: 0 auto 13px;
+    }
+
+    .status-card {
+      padding: 8px 5px;
+      color: var(--navy);
+      text-align: center;
+      font-size: .8rem;
+      font-weight: bold;
+      background: #fff9dd;
+      border: 3px solid #efd263;
+      border-radius: 13px;
+    }
+
+    .status-card strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 1.2rem;
+    }
+
+    .message {
+      max-width: 800px;
+      min-height: 42px;
+      margin: 0 auto 12px;
+      padding: 10px;
+      color: var(--navy);
+      text-align: center;
+      font-weight: bold;
+      background: #e1f6ff;
+      border: 3px solid #7eccec;
+      border-radius: 13px;
+    }
+
+    .message.win {
+      color: #145c27;
+      background: #d9f8de;
+      border-color: #70ce81;
+    }
+
+    /* Board */
+    .board-scroll {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .solitaire-board {
+      min-width: 780px;
+      padding: 16px;
+      background:
+        radial-gradient(circle at 15% 18%, rgba(255,255,255,.12) 0 2%, transparent 2.5%),
+        radial-gradient(circle at 75% 22%, rgba(255,255,255,.10) 0 2%, transparent 2.5%),
+        linear-gradient(135deg, var(--table), var(--table-dark));
+      border: 5px solid white;
+      border-radius: 20px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      min-height: 124px;
+      margin-bottom: 18px;
+    }
+
+    .stock-area,
+    .foundation-area {
+      display: flex;
+      gap: 12px;
+    }
+
+    .foundation-area {
+      margin-left: auto;
+    }
+
+    .pile-slot {
+      position: relative;
+      width: var(--card-width);
+      height: var(--card-height);
+      flex: 0 0 var(--card-width);
+      border: 3px dashed rgba(255,255,255,.55);
+      border-radius: 11px;
+      background: rgba(255,255,255,.10);
+    }
+
+    .empty-foundation-label {
+      position: absolute;
+      top: 35px;
+      left: 5px;
+      right: 5px;
+      color: white;
+      text-align: center;
+      font-size: .67rem;
+      font-weight: bold;
+      line-height: 1.2;
+      opacity: .85;
+      pointer-events: none;
+    }
+
+    .tableau {
+      display: grid;
+      grid-template-columns: repeat(7, var(--card-width));
+      gap: 13px;
+      align-items: start;
+    }
+
+    .tableau-pile {
+      position: relative;
+      width: var(--card-width);
+      min-height: 290px;
+      border-radius: 10px;
+    }
+
+    .tableau-pile.empty {
+      border: 3px dashed rgba(255,255,255,.45);
+      background: rgba(255,255,255,.08);
+    }
+
+    .empty-tableau-label {
+      position: absolute;
+      top: 105px;
+      left: 4px;
+      right: 4px;
+      color: rgba(255,255,255,.85);
+      text-align: center;
+      font-size: .65rem;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    /* Playing Cards */
+    .playing-card {
+      position: absolute;
+      left: 0;
+      width: var(--card-width);
+      height: var(--card-height);
+      padding: 6px;
+      overflow: hidden;
+      color: var(--navy);
+      text-align: left;
+      background: #fffef7;
+      border: 3px solid white;
+      border-radius: 11px;
+      box-shadow: 0 4px 0 rgba(0,0,0,.24);
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .playing-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .playing-card.red-suit {
+      color: var(--red);
+    }
+
+    .playing-card.black-suit {
+      color: var(--navy);
+    }
+
+    .playing-card.selected {
+      z-index: 30 !important;
+      border-color: var(--gold);
+      outline: 4px solid var(--gold);
+      transform: translateY(-7px);
+      box-shadow: 0 5px 0 #aa8400;
+    }
+
+    .playing-card.back {
+      color: white;
+      cursor: pointer;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          #6639a0,
+          #6639a0 8px,
+          #8d61ca 8px,
+          #8d61ca 16px
+        );
+      border-color: var(--gold);
+    }
+
+    .playing-card.back::after {
+      content: "✝";
+      position: absolute;
+      inset: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 3.5rem;
+      border: 3px solid var(--gold);
+      border-radius: 9px;
+    }
+
+    .card-rank-top {
+      font-size: 1.05rem;
+      font-weight: bold;
+      line-height: .9;
+    }
+
+    .card-symbol-top {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .card-center {
+      display: flex;
+      height: 65px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 2.2rem;
+    }
+
+    .card-fact {
+      position: absolute;
+      right: 4px;
+      bottom: 4px;
+      left: 4px;
+      overflow: hidden;
+      color: #314666;
+      text-align: center;
+      font-size: .57rem;
+      font-weight: bold;
+      line-height: 1.05;
+    }
+
+    .card-suit-name {
+      position: absolute;
+      top: 7px;
+      right: 5px;
+      max-width: 48px;
+      color: #65738d;
+      text-align: right;
+      font-size: .48rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .waste-card,
+    .foundation-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* How to Play */
+    .how-to-play {
+      max-width: 800px;
+      margin: 15px auto 0;
+      padding: 14px;
+      color: var(--navy);
+      background: #fff9dd;
+      border: 3px solid #efd263;
+      border-radius: 15px;
+      line-height: 1.45;
+    }
+
+    .how-to-play h3 {
+      margin: 0 0 8px;
+    }
+
+    .how-to-play ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    @keyframes floatUp {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @media (max-width: 650px) {
+      :root {
+        --card-width: 68px;
+        --card-height: 94px;
+      }
+
+      body {
+        padding: 5px;
+      }
+
+      header {
+        padding: 10px;
+      }
+
+      header h1 {
+        font-size: 1.55rem;
+      }
+
+      header p {
+        font-size: .78rem;
+      }
+
+      main {
+        padding: 10px;
+      }
+
+      .card-box {
+        padding: 14px 10px;
+        border-width: 3px;
+      }
+
+      .hero-icon {
+        font-size: 3.7rem;
+      }
+
+      .intro {
+        font-size: .94rem;
+      }
+
+      .status-row {
+        gap: 5px;
+      }
+
+      .status-card {
+        padding: 5px 2px;
+        font-size: .62rem;
+      }
+
+      .status-card strong {
+        font-size: .95rem;
+      }
+
+      .solitaire-board {
+        min-width: 635px;
+        padding: 10px;
+      }
+
+      .top-row {
+        gap: 14px;
+        min-height: 101px;
+        margin-bottom: 12px;
+      }
+
+      .stock-area,
+      .foundation-area {
+        gap: 7px;
+      }
+
+      .tableau {
+        gap: 8px;
+      }
+
+      .tableau-pile {
+        min-height: 250px;
+      }
+
+      .playing-card {
+        padding: 4px;
+        border-width: 2px;
+        border-radius: 8px;
+      }
+
+      .card-rank-top {
+        font-size: .8rem;
+      }
+
+      .card-symbol-top {
+        font-size: 1rem;
+      }
+
+      .card-center {
+        height: 49px;
+        font-size: 1.65rem;
+      }
+
+      .card-fact {
+        font-size: .44rem;
+      }
+
+      .card-suit-name {
+        font-size: .4rem;
+      }
+
+      .empty-foundation-label {
+        top: 25px;
+        font-size: .5rem;
+      }
+
+      .empty-tableau-label {
+        top: 82px;
+        font-size: .52rem;
+      }
+
+      button,
+      .button-link {
+        padding: 8px 10px;
+        font-size: .78rem;
+      }
+
+      .message,
+      .how-to-play {
+        font-size: .85rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <section class="game-shell">
+      <header>
+        <h1>✝ Jesus Savior Solitaire ✝</h1>
+        <p>Build each Bible theme from Ace to King.</p>
+      </header>
+
+      <main>
+        <!-- Start Screen -->
+        <section id="startScreen" class="screen active">
+          <div class="card-box">
+            <span class="hero-icon">👑 ✝️ 🃏</span>
+
+            <h2>Jesus Savior Solitaire</h2>
+
+            <p class="intro">
+              Play a Bible-themed version of classic Solitaire.
+              Move cards in descending order and build each foundation
+              from Ace through King.
+            </p>
+
+            <p class="intro">
+              The four Bible card themes teach about Jesus:
+              His promise and birth, His teachings, His love and miracles,
+              and His cross and resurrection.
+            </p>
+
+            <div class="button-row">
+              <button id="startBtn" class="green-button">
+                ▶ Start New Game
+              </button>
+
+              <a href="index.html" class="button-link navy-button">
+                ⚡ Return to Power-Up Game
+              </a>
+
+              <a href="flashcards.html" class="button-link purple-button">
+                🃏 Flash Cards
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Game Screen -->
+        <section id="gameScreen" class="screen">
+          <div class="status-row">
+            <div class="status-card">
+              Moves
+              <strong id="movesDisplay">0</strong>
+            </div>
+
+            <div class="status-card">
+              Foundations
+              <strong><span id="foundationCount">0</span> / 52</strong>
+            </div>
+
+            <div class="status-card">
+              Theme
+              <strong>Jesus</strong>
+            </div>
+
+            <div class="status-card">
+              Goal
+              <strong>Build 4 Piles</strong>
+            </div>
+          </div>
+
+          <div id="gameMessage" class="message">
+            Tap a face-up card to select it. Then tap where you want to move it.
+          </div>
+
+          <div class="button-row" style="margin-bottom:12px;">
+            <button id="newGameBtn" class="green-button">
+              🔄 New Game
+            </button>
+
+            <button id="clearSelectionBtn" class="purple-button">
+              ✖ Clear Selection
+            </button>
+
+            <button id="helpBtn" class="blue-button">
+              ❔ How to Play
+            </button>
+          </div>
+
+          <div class="board-scroll">
+            <section id="solitaireBoard" class="solitaire-board">
+              <div class="top-row">
+                <div class="stock-area">
+                  <div id="stockPile" class="pile-slot"></div>
+                  <div id="wastePile" class="pile-slot"></div>
+                </div>
+
+                <div id="foundationArea" class="foundation-area"></div>
+              </div>
+
+              <div id="tableauArea" class="tableau"></div>
+            </section>
+          </div>
+
+          <section id="howToPlayBox" class="how-to-play" style="display:none;">
+            <h3>How to Play</h3>
+
+            <ol>
+              <li>Tap a face-up card to select it.</li>
+              <li>Tap another pile to move the selected card.</li>
+              <li>Build the seven bottom piles in descending number order.</li>
+              <li>Alternate red and dark cards in the bottom piles.</li>
+              <li>Only a King can move into an empty bottom pile.</li>
+              <li>Build the top foundation piles from Ace to King by matching theme.</li>
+              <li>Tap the purple card pile to draw a new card.</li>
+            </ol>
+          </section>
+        </section>
+
+        <!-- Victory Screen -->
+        <section id="victoryScreen" class="screen">
+          <div class="card-box">
+            <span class="hero-icon">🏆 ✝️ ⭐</span>
+
+            <h2>Jesus Savior Solitaire Complete!</h2>
+
+            <p id="victoryText" class="intro"></p>
+
+            <p class="intro">
+              Jesus is our Savior. He came to earth, taught with love,
+              died on the cross, and rose again.
+            </p>
+
+            <div class="button-row">
+              <button id="playAgainBtn" class="green-button">
+                🔄 Play Again
+              </button>
+
+              <a href="word-connect.html" class="button-link purple-button">
+                🔤 Bible Word Connect
+              </a>
+
+              <a href="index.html" class="button-link navy-button">
+                ⚡ Power-Up Game
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+  </main>
+
+  <script>
+    const suits = [
+      {
+        id: "birth",
+        symbol: "⭐",
+        name: "Promise & Birth",
+        color: "red",
+        facts: [
+          "Promise",
+          "Angel",
+          "Mary",
+          "Joseph",
+          "Bethlehem",
+          "Manger",
+          "Shepherds",
+          "Star",
+          "Wise Men",
+          "Nazareth",
+          "Good News",
+          "Emmanuel",
+          "Savior"
+        ]
+      },
+      {
+        id: "teachings",
+        symbol: "🕊️",
+        name: "Teachings",
+        color: "black",
+        facts: [
+          "Baptism",
+          "Prayer",
+          "Parables",
+          "Faith",
+          "Mercy",
+          "Truth",
+          "Kingdom",
+          "Shepherd",
+          "Bread of Life",
+          "Light",
+          "Love God",
+          "Love Others",
+          "King Jesus"
+        ]
+      },
+      {
+        id: "love",
+        symbol: "❤️",
+        name: "Love & Miracles",
+        color: "red",
+        facts: [
+          "Love",
+          "Healing",
+          "Water to Wine",
+          "Calms Storm",
+          "Feeds Many",
+          "Walks on Water",
+          "Forgives",
+          "Blesses Children",
+          "Raises Lazarus",
+          "Serves Others",
+          "Compassion",
+          "Peace",
+          "Victory Love"
+        ]
+      },
+      {
+        id: "cross",
+        symbol: "✝️",
+        name: "Cross & Resurrection",
+        color: "black",
+        facts: [
+          "Jerusalem",
+          "Last Supper",
+          "Garden Prayer",
+          "The Cross",
+          "Forgiveness",
+          "The Tomb",
+          "Risen Jesus",
+          "Emmaus Road",
+          "Great Commission",
+          "Ascension",
+          "Hope",
+          "Eternal Life",
+          "Risen King"
+        ]
+      }
+    ];
+
+    const rankLabels = {
+      1: "A",
+      11: "J",
+      12: "Q",
+      13: "K"
+    };
+
+    let stock = [];
+    let waste = [];
+    let foundations = {
+      birth: [],
+      teachings: [],
+      love: [],
+      cross: []
+    };
+
+    let tableau = [[], [], [], [], [], [], []];
+
+    let selected = null;
+    let moves = 0;
+
+    const startScreen = document.getElementById("startScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const victoryScreen = document.getElementById("victoryScreen");
+
+    const movesDisplay = document.getElementById("movesDisplay");
+    const foundationCount = document.getElementById("foundationCount");
+    const gameMessage = document.getElementById("gameMessage");
+
+    const stockPile = document.getElementById("stockPile");
+    const wastePile = document.getElementById("wastePile");
+    const foundationArea = document.getElementById("foundationArea");
+    const tableauArea = document.getElementById("tableauArea");
+
+    function getRankLabel(rank) {
+      return rankLabels[rank] || rank;
+    }
+
+    function getSuit(suitId) {
+      return suits.find(suit => suit.id === suitId);
+    }
+
+    function createDeck() {
+      const deck = [];
+
+      suits.forEach(suit => {
+        for (let rank = 1; rank <= 13; rank++) {
+          deck.push({
+            id: `${suit.id}-${rank}`,
+            suit: suit.id,
+            rank,
+            faceUp: false
+          });
+        }
+      });
+
+      return deck;
+    }
+
+    function shuffle(deck) {
+      const newDeck = [...deck];
+
+      for (let i = newDeck.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+
+        [newDeck[i], newDeck[randomIndex]] =
+          [newDeck[randomIndex], newDeck[i]];
+      }
+
+      return newDeck;
+    }
+
+    function newGame() {
+      const deck = shuffle(createDeck());
+
+      stock = [];
+      waste = [];
+
+      foundations = {
+        birth: [],
+        teachings: [],
+        love: [],
+        cross: []
+      };
+
+      tableau = [[], [], [], [], [], [], []];
+
+      selected = null;
+      moves = 0;
+
+      /*
+        Deal seven Solitaire piles.
+        Each pile has one more card than the pile before it.
+      */
+      for (let pileIndex = 0; pileIndex < 7; pileIndex++) {
+        for (let cardIndex = 0; cardIndex <= pileIndex; cardIndex++) {
+          const card = deck.pop();
+
+          card.faceUp = cardIndex === pileIndex;
+          tableau[pileIndex].push(card);
+        }
+      }
+
+      stock = deck.map(card => ({
+        ...card,
+        faceUp: false
+      }));
+
+      gameMessage.className = "message";
+      gameMessage.textContent =
+        "Tap a face-up card to select it. Then tap a card pile to move it.";
+
+      renderGame();
+    }
+
+    function renderGame() {
+      movesDisplay.textContent = moves;
+
+      const totalFoundationCards =
+        foundations.birth.length +
+        foundations.teachings.length +
+        foundations.love.length +
+        foundations.cross.length;
+
+      foundationCount.textContent = totalFoundationCards;
+
+      renderStock();
+      renderWaste();
+      renderFoundations();
+      renderTableau();
+
+      if (totalFoundationCards === 52) {
+        showVictory();
+      }
+    }
+
+ function renderStock() {
+  stockPile.innerHTML = "";
+
+  /*
+    Always show the purple deck.
+    Even when the stock is empty, clicking it will
+    recycle the waste cards and draw again.
+  */
+  const backCard = document.createElement("button");
+
+  backCard.className = "playing-card back";
+  backCard.setAttribute("aria-label", "Draw a card");
+  backCard.style.top = "0px";
+  backCard.style.zIndex = "2";
+
+  backCard.addEventListener("click", drawCard);
+
+  stockPile.appendChild(backCard);
+}
+
+    function renderWaste() {
+      wastePile.innerHTML = "";
+
+      const topCard = waste[waste.length - 1];
+
+      if (!topCard) {
+        wastePile.innerHTML =
+          '<span class="empty-foundation-label">Draw<br>Card</span>';
+        return;
+      }
+
+      const cardElement = createCardElement(
+        topCard,
+        {
+          type: "waste",
+          cardIndex: waste.length - 1
+        }
+      );
+
+      cardElement.classList.add("waste-card");
+      wastePile.appendChild(cardElement);
+    }
+
+    function renderFoundations() {
+      foundationArea.innerHTML = "";
+
+      suits.forEach(suit => {
+        const foundationPile = document.createElement("div");
+
+        foundationPile.className = "pile-slot";
+        foundationPile.dataset.suit = suit.id;
+
+        const topCard =
+          foundations[suit.id][foundations[suit.id].length - 1];
+
+        if (topCard) {
+          const cardElement = createCardElement(
+            topCard,
+            {
+              type: "foundation",
+              suit: suit.id,
+              cardIndex: foundations[suit.id].length - 1
+            }
+          );
+
+          cardElement.classList.add("foundation-card");
+          foundationPile.appendChild(cardElement);
+        } else {
+          const label = document.createElement("span");
+
+          label.className = "empty-foundation-label";
+          label.innerHTML = `${suit.symbol}<br>${suit.name}`;
+
+          foundationPile.appendChild(label);
+        }
+
+        foundationPile.addEventListener("click", (event) => {
+          if (event.target === foundationPile ||
+              event.target.classList.contains("empty-foundation-label")) {
+            tryMoveToFoundation(suit.id);
+          }
+        });
+
+        foundationArea.appendChild(foundationPile);
+      });
+    }
+
+    function renderTableau() {
+      tableauArea.innerHTML = "";
+
+      tableau.forEach((pile, pileIndex) => {
+        const pileElement = document.createElement("div");
+
+        pileElement.className = "tableau-pile";
+
+        if (pile.length === 0) {
+          pileElement.classList.add("empty");
+
+          const label = document.createElement("span");
+          label.className = "empty-tableau-label";
+          label.textContent = "King Only";
+
+          pileElement.appendChild(label);
+        }
+
+        pile.forEach((card, cardIndex) => {
+          const cardElement = createCardElement(
+            card,
+            {
+              type: "tableau",
+              pileIndex,
+              cardIndex
+            }
+          );
+
+          cardElement.style.top = `${cardIndex * 27}px`;
+          cardElement.style.zIndex = cardIndex + 1;
+
+          pileElement.appendChild(cardElement);
+        });
+
+        pileElement.addEventListener("click", (event) => {
+          if (event.target === pileElement ||
+              event.target.classList.contains("empty-tableau-label")) {
+            tryMoveToTableau(pileIndex);
+          }
+        });
+
+        tableauArea.appendChild(pileElement);
+      });
+    }
+
+    function createCardElement(card, source) {
+      const suit = getSuit(card.suit);
+      const button = document.createElement("button");
+
+      if (!card.faceUp) {
+        button.className = "playing-card back";
+        button.setAttribute("aria-label", "Face-down card");
+
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          flipTableauCard(source);
+        });
+
+        return button;
+      }
+
+      button.className =
+        `playing-card ${suit.color === "red" ? "red-suit" : "black-suit"}`;
+
+      if (isSelected(source)) {
+        button.classList.add("selected");
+      }
+
+      button.setAttribute(
+        "aria-label",
+        `${getRankLabel(card.rank)} ${suit.name}`
+      );
+
+      button.innerHTML = `
+        <div class="card-rank-top">${getRankLabel(card.rank)}</div>
+        <span class="card-symbol-top">${suit.symbol}</span>
+        <span class="card-suit-name">${suit.name}</span>
+        <div class="card-center">${suit.symbol}</div>
+        <div class="card-fact">${suit.facts[card.rank - 1]}</div>
+      `;
+
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        handleCardClick(source);
+      });
+
+      return button;
+    }
+
+    function isSelected(source) {
+      if (!selected) return false;
+
+      if (selected.type !== source.type) return false;
+
+      if (source.type === "tableau") {
+        return (
+          selected.pileIndex === source.pileIndex &&
+          source.cardIndex >= selected.cardIndex
+        );
+      }
+
+      if (source.type === "foundation") {
+        return selected.suit === source.suit;
+      }
+
+      if (source.type === "waste") {
+        return true;
+      }
+
+      return false;
+    }
+
+    function getCardFromSource(source) {
+      if (source.type === "waste") {
+        return waste[waste.length - 1];
+      }
+
+      if (source.type === "foundation") {
+        const pile = foundations[source.suit];
+        return pile[pile.length - 1];
+      }
+
+      if (source.type === "tableau") {
+        return tableau[source.pileIndex][source.cardIndex];
+      }
+
+      return null;
+    }
+
+    function getCardsFromSource(source) {
+      if (source.type === "waste") {
+        return waste.length ? [waste[waste.length - 1]] : [];
+      }
+
+      if (source.type === "foundation") {
+        const pile = foundations[source.suit];
+        return pile.length ? [pile[pile.length - 1]] : [];
+      }
+
+      if (source.type === "tableau") {
+        return tableau[source.pileIndex].slice(source.cardIndex);
+      }
+
+      return [];
+    }
+
+    function handleCardClick(source) {
+      const card = getCardFromSource(source);
+
+      if (!card || !card.faceUp) return;
+
+      /*
+        If a card is already selected, tapping a card on
+        another pile attempts to move it there.
+      */
+      if (selected) {
+        if (sameSource(selected, source)) {
+          selected = null;
+          gameMessage.textContent = "Selection cleared.";
+          renderGame();
+          return;
+        }
+
+        if (source.type === "foundation") {
+          tryMoveToFoundation(source.suit);
+          return;
+        }
+
+        if (source.type === "tableau") {
+          const isTopCard =
+            source.cardIndex === tableau[source.pileIndex].length - 1;
+
+          if (isTopCard) {
+            tryMoveToTableau(source.pileIndex);
+            return;
+          }
+        }
+      }
+
+      selected = source;
+
+      gameMessage.className = "message";
+      gameMessage.textContent =
+        "Card selected. Tap a pile or foundation where you want to move it.";
+
+      renderGame();
+    }
+
+    function sameSource(first, second) {
+      if (first.type !== second.type) return false;
+
+      if (first.type === "waste") return true;
+
+      if (first.type === "foundation") {
+        return first.suit === second.suit;
+      }
+
+      if (first.type === "tableau") {
+        return (
+          first.pileIndex === second.pileIndex &&
+          first.cardIndex === second.cardIndex
+        );
+      }
+
+      return false;
+    }
+
+    function flipTableauCard(source) {
+      if (selected) {
+        gameMessage.textContent =
+          "Clear your selected card before flipping another card.";
+        return;
+      }
+
+      if (source.type !== "tableau") return;
+
+      const pile = tableau[source.pileIndex];
+      const isTopCard = source.cardIndex === pile.length - 1;
+
+      if (!isTopCard) return;
+
+      pile[source.cardIndex].faceUp = true;
+
+      moves++;
+
+      gameMessage.className = "message win";
+      gameMessage.textContent =
+        "Nice move! You turned over a new Bible card.";
+
+      renderGame();
+    }
+
+    function tryMoveToTableau(destinationPileIndex) {
+      if (!selected) {
+        gameMessage.textContent =
+          "Select a face-up card first.";
+        return;
+      }
+
+      const movingCards = getCardsFromSource(selected);
+
+      if (movingCards.length === 0) return;
+
+      const firstMovingCard = movingCards[0];
+      const destinationPile = tableau[destinationPileIndex];
+      const destinationTopCard =
+        destinationPile[destinationPile.length - 1];
+
+      /*
+        Do not move cards onto the same tableau pile.
+      */
+      if (
+        selected.type === "tableau" &&
+        selected.pileIndex === destinationPileIndex
+      ) {
+        gameMessage.textContent =
+          "Choose a different card pile.";
+        return;
+      }
+
+      let validMove = false;
+
+      if (!destinationTopCard) {
+        validMove = firstMovingCard.rank === 13;
+      } else {
+        const movingSuit = getSuit(firstMovingCard.suit);
+        const destinationSuit = getSuit(destinationTopCard.suit);
+
+        validMove =
+          destinationTopCard.faceUp &&
+          firstMovingCard.rank === destinationTopCard.rank - 1 &&
+          movingSuit.color !== destinationSuit.color;
+      }
+
+      if (!validMove) {
+        gameMessage.textContent =
+          "Cards must go down in number and alternate red and dark colors.";
+        return;
+      }
+
+      removeCardsFromSource(selected);
+
+      movingCards.forEach(card => {
+        card.faceUp = true;
+        destinationPile.push(card);
+      });
+
+      selected = null;
+      moves++;
+
+      gameMessage.className = "message win";
+      gameMessage.textContent =
+        "Great move! Keep building the card piles.";
+
+      renderGame();
+    }
+
+    function tryMoveToFoundation(destinationSuitId) {
+      if (!selected) {
+        gameMessage.textContent =
+          "Select a card first.";
+        return;
+      }
+
+      const movingCards = getCardsFromSource(selected);
+
+      /*
+        Only one card can move to a foundation at a time.
+      */
+      if (movingCards.length !== 1) {
+        gameMessage.textContent =
+          "Move one card at a time to the foundation.";
+        return;
+      }
+
+      const movingCard = movingCards[0];
+      const foundationPile = foundations[destinationSuitId];
+
+      if (movingCard.suit !== destinationSuitId) {
+        gameMessage.textContent =
+          "Foundation cards must match the same Bible theme.";
+        return;
+      }
+
+      if (movingCard.rank !== foundationPile.length + 1) {
+        gameMessage.textContent =
+          "Build each foundation from Ace to King.";
+        return;
+      }
+
+      removeCardsFromSource(selected);
+
+      movingCard.faceUp = true;
+      foundationPile.push(movingCard);
+
+      selected = null;
+      moves++;
+
+      gameMessage.className = "message win";
+      gameMessage.textContent =
+        `Wonderful! ${getSuit(destinationSuitId).name} foundation is growing.`;
+
+      renderGame();
+    }
+
+    function removeCardsFromSource(source) {
+      if (source.type === "waste") {
+        waste.pop();
+        return;
+      }
+
+      if (source.type === "foundation") {
+        foundations[source.suit].pop();
+        return;
+      }
+
+      if (source.type === "tableau") {
+        tableau[source.pileIndex].splice(source.cardIndex);
+      }
+    }
+
+   function drawCard() {
+  /*
+    Easy play:
+    Automatically clear any selected card so the child
+    can always click the purple deck for another card.
+  */
+  selected = null;
+
+  /*
+    If the purple deck is empty, recycle all used cards.
+  */
+  if (stock.length === 0 && waste.length > 0) {
+    stock = waste
+      .reverse()
+      .map(card => ({
+        ...card,
+        faceUp: false
+      }));
+
+    waste = [];
+
+    gameMessage.className = "message win";
+    gameMessage.textContent =
+      "Cards recycled! Here is another card to help you play.";
+  }
+
+  /*
+    If every card has been moved out of the deck and waste,
+    there is nothing more to draw.
+  */
+  if (stock.length === 0) {
+    gameMessage.className = "message";
+    gameMessage.textContent =
+      "No more cards to draw right now. Try moving cards from the bottom piles.";
+
+    renderGame();
+    return;
+  }
+
+  /*
+    Draw one new card from the purple deck.
+  */
+  const card = stock.pop();
+
+  card.faceUp = true;
+  waste.push(card);
+
+  moves++;
+
+  gameMessage.className = "message";
+  gameMessage.textContent =
+    "New Bible card drawn! Tap it, then move it to a bottom pile or foundation.";
+
+  renderGame();
+}
+
+    function recycleWaste() {
+      if (selected) {
+        gameMessage.textContent =
+          "Clear your selection before recycling cards.";
+        return;
+      }
+
+      if (waste.length === 0) {
+        gameMessage.textContent =
+          "There are no cards to recycle.";
+        return;
+      }
+
+      stock = waste
+        .reverse()
+        .map(card => ({
+          ...card,
+          faceUp: false
+        }));
+
+      waste = [];
+
+      moves++;
+
+      gameMessage.className = "message";
+      gameMessage.textContent =
+        "Cards recycled. Tap the purple pile to draw again.";
+
+      renderGame();
+    }
+
+    function showVictory() {
+      gameScreen.classList.remove("active");
+      victoryScreen.classList.add("active");
+
+      document.getElementById("victoryText").innerHTML = `
+        You built all four Jesus Savior foundations in
+        <strong>${moves}</strong> moves!<br><br>
+        You completed the Promise & Birth, Teachings,
+        Love & Miracles, and Cross & Resurrection card piles.
+      `;
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      startScreen.classList.remove("active");
+      victoryScreen.classList.remove("active");
+      gameScreen.classList.add("active");
+
+      newGame();
+    });
+
+    document.getElementById("newGameBtn").addEventListener("click", () => {
+      if (confirm("Start a new Jesus Savior Solitaire game?")) {
+        newGame();
+      }
+    });
+
+    document.getElementById("clearSelectionBtn").addEventListener("click", () => {
+      selected = null;
+
+      gameMessage.className = "message";
+      gameMessage.textContent = "Selection cleared.";
+
+      renderGame();
+    });
+
+    document.getElementById("helpBtn").addEventListener("click", () => {
+      const helpBox = document.getElementById("howToPlayBox");
+
+      helpBox.style.display =
+        helpBox.style.display === "none" ? "block" : "none";
+    });
+
+    document.getElementById("playAgainBtn").addEventListener("click", () => {
+      victoryScreen.classList.remove("active");
+      gameScreen.classList.add("active");
+
+      newGame();
+    });
+  </script>
+</body>
+</html>
